@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% if (htmlWebpackPlugin.options.nodeModules) { %>
+        <!-- Add `node_modules/` to global paths so `require` works properly in development -->
+        <script>
+            require('module').globalPaths.push('<%= htmlWebpackPlugin.options.nodeModules.replace(/\\/g, "\\\\") %>')
+        </script>
+        <% } %>
+</head>
+
+<body>
+    <h1 stlye="font-size:100px;">Data Processing Thread</h1>
+
+    <script>
+        //Data process 
+
+        //Node Modules imports
+        const electron = require('electron')
+        var ipcRenderer = electron.ipcRenderer
+        const axios = require('axios')
+        const CoinMarketCap = require('coinmarketcap-api')
+        const client = new CoinMarketCap()
+
+
+
+        //Api Data store
+        let CoinsPrices = []
+        let CoinOptions = []
+
+
+
+        ipcRenderer.on("txt", (event, data) => {
+            console.log(data.msg)
+        })
+
+        ipcRenderer.on("get-price-data", (event, settings) => {
+            let cData = CustomAPIcall(settings)
+
+            electron.ipcRenderer("send-price-data", cData)
+
+        })
+
+        //---------------------------FUNCTIONS-----------------------------------//
+
+        //number Format Function
+        const numberWithCommas = (x) => {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        //Function to get a coin IDs
+        const sortForCoinId = (CoinsPrices) => {
+            return CoinsPrices.map(a => a.id)
+        }
+
+        //Args = {limt, convert, start etc...}  <- Takes in this and return result array[] of customAPIcall
+        const CustomAPIcall = (settings) => {
+            const customcall = new CoinMarketCap()
+            customcall.getTicker(settings)
+                .then((data) => {
+                    return data
+                }).catch(console.error)
+        }
+
+        //---------------------------MAIN RUNTIME LOGIC-------------------------//
+        //on load
+        client.getTicker()
+            .then((data) => {
+                CoinsPrices = data
+                CoinOptions = data.map(a => a.id)
+                console.log("Onload call made")
+                console.log(CoinOptions)
+                console.log(CoinsPrices)
+            }).catch(console.error)
+
+        //Setinterval to auto-update data
+        setInterval(() => {
+            client.getTicker()
+                .then((data) => {
+                    CoinsPrices = data
+                    console.log("Repeat call made")
+                    console.log(CoinOptions)
+                    console.log(CoinsPrices)
+                }).catch(console.error)
+        }, 10000)
+
+        //Connect to DB
+    </script>
+
+</body>
+
+</html>
