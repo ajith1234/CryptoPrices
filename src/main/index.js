@@ -1,4 +1,5 @@
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow, ipcMain, ipcRenderer } from 'electron'
+
 
 /**
  * Set `__static` path to static files in production
@@ -10,6 +11,14 @@ if (process.env.NODE_ENV !== 'development') {
 
 let mainWindow = null
 let dataWindow = null
+global.config = {
+    apiKey: "AIzaSyBrrG8hM8wgvGXxtK7hDlmNBk_Ts-HjS9U",
+    authDomain: "fyp-cryptoprices.firebaseapp.com",
+    databaseURL: "https://fyp-cryptoprices.firebaseio.com",
+    projectId: "fyp-cryptoprices",
+    storageBucket: "fyp-cryptoprices.appspot.com",
+    messagingSenderId: "821627309596"
+}
 
 //sets the 
 const winURL = process.env.NODE_ENV === 'development' ?
@@ -44,6 +53,8 @@ function createWindow() {
     dataWindow.loadURL(dataURL)
     mainWindow.loadURL(winURL)
 
+
+
     // closes app when the main window is closed
     mainWindow.on('closed', () => {
         mainWindow = null
@@ -64,8 +75,14 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
     if (mainWindow === null && dataWindow === null) {
         createWindow()
+
     }
 })
+
+ipcMain.on('get-db-config', () => {
+    dataWindow.webContents.send("send-db-config", config)
+})
+
 
 // test Method
 ipcMain.on('txt', (event, data) => {
