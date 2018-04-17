@@ -79,20 +79,21 @@ app.on('activate', () => {
     }
 })
 
-ipcMain.on('get-db-config', () => {
-    dataWindow.webContents.send("send-db-config", config)
+
+// called from app.vue
+ipcMain.on('get-coins-main', (event) => {
+    dataWindow.webContents.send("get-coin-data")
 })
 
-
-// test Method
-ipcMain.on('txt', (event, data) => {
-    dataWindow.webContents.send('txt', data)
+// called from data.ejs
+ipcMain.on('send-coin-data', (event, data) => {
+    mainWindow.webContents.send('set-data', data)
 })
 
-//Config for the data base
-ipcMain.on('get-config', (event, config) => {
-    dataWindow.webContents.send('send-config', config)
+ipcMain.on("send-login", (event, data) => {
+    dataWindow.webContents.send("Login", data)
 })
+
 
 
 

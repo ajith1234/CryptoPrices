@@ -20,13 +20,19 @@ export default new Router({
             component: require('@/components/Login').default
         },
         {
-            path: '/signin',
-            name: 'signin',
-            component: require('@/components/SignIn').default
+            path: '/signup',
+            name: 'signup',
+            component: require('@/components/SignUp').default
         },
         {
             path: '*',
             redirect: '/'
         }
-    ]
+    ],
+    beforeEach: ((to, from, next) => {
+        console.log(to)
+        console.log(from)
+        console.log(next)
+    })
+
 })

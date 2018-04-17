@@ -1,14 +1,12 @@
 <template>
   <div id="app">
-    <v-app id="inspire" dark>
+    <v-app id="inspire">
       <nav-bar></nav-bar>
-     <v-content>
-      <v-container fluid fill-height>
+      <v-container dark fluid fill-height color="white" :class="{'px-0': $vuetify.breakpoint.xsOnly }">
        <v-slide-y-transition mode="out-in">
             <router-view class="content"></router-view>
           </v-slide-y-transition>
       </v-container>
-    </v-content>
     <v-footer app fixed>
        
       <span class="ml-1">&copy; Ajith Abraham 2018</span>
@@ -19,6 +17,7 @@
 
 <script>
    import Navbar from './components/Navbar.vue'
+  import {ipcRenderer} from 'electron'
    
 
    
@@ -29,9 +28,21 @@
       'nav-bar': Navbar
     },
     mounted(){
-      this.$store.dispatch("getData")
+          
+         
 
-      this.$electron.ipcRenderer.send('txt', {msg: "This is my message"})
+           //Calls to Main Process for Coin data and repeats
+           this.$store.dispatch("getData")
+           setInterval(()=>{this.$store.dispatch("getData")}, 1000)
+           
+           //sets the result returned from data->main->app in the vuex store
+           ipcRenderer.on("set-data", (event, data) => {
+            this.$store.commit("setData", data)
+          })
+
+          ipcRenderer.on("auth-error", (event, data) => {
+            alert(data)
+          })
        
     
   },

@@ -13,6 +13,8 @@
 <body>
     <h1 stlye="font-size:100px;">Data Processing Thread</h1>
 
+
+
     <script>
         //Data process 
 
@@ -25,11 +27,18 @@
         const CoinMarketCap = require('coinmarketcap-api')
         const client = new CoinMarketCap()
 
+        //user details
+        let name
+        let email
+        let password
+        let auth = false
         const firebase = require('firebase')
 
 
+
+
         //Api Data store
-        let CoinsPrices = []
+        let Coins = []
         let CoinOptions = []
 
         //connecting to the firebase database
@@ -41,22 +50,33 @@
 
         //---------------------------IPCRenderer events-----------------------------------//
 
-        ipcRenderer.on("txt", (event, data) => {
-            console.log(data.msg)
+
+        ipcRenderer.on("get-coin-data", (event) => {
+            console.log(this.Coins)
+            ipcRenderer.send("send-coin-data", this.Coins)
         })
 
-        ipcRenderer.on("send-db-config", (event, config) => {
-            dbConfig = config
-
-            console.log('Database Connection Verified')
-            dbActions()
-
-        })
 
         ipcRenderer.on("get-price-data", (event, settings) => {
             let cData = CustomAPIcall(settings)
 
-            electron.ipcRenderer("send-price-data", cData)
+            ipcRenderer.send("send-price-data", cData)
+
+        })
+
+        ipcRenderer.on("signUp", (event, data) => {
+
+        })
+
+        ipcRenderer.on("Login", (event, data) => {
+
+            firebase.auth().signInWithEmailAndPassword(data.email, data.password).catch(function(error) {
+
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                console.log(errorCode + errorMessage)
+                remote.mainWindow.send("auth-error", errorMessage)
+            });
 
         })
 
@@ -82,34 +102,35 @@
         }
 
         const dbActions = () => {
-                let fruits = firebase.database().ref('fruits')
 
-                var data = {
-                    name: 'Den DEn',
-                    pagan: true
-                }
-
-                console.log(fruits)
-                fruits.push(data)
             }
             //---------------------------MAIN RUNTIME LOGIC-------------------------//
             //on load
         client.getTicker()
             .then((data) => {
-                CoinsPrices = data
-                CoinOptions = data.map(a => a.id)
+                this.Coins = data
+                this.CoinOptions = data.map(a => a.id)
+
             }).catch(console.error)
 
         //Setinterval to auto-update data
         setInterval(() => {
             client.getTicker()
                 .then((data) => {
-                    CoinsPrices = data
+                    this.Coins = data
+
                 }).catch(console.error)
         }, 10000)
 
         //Connect to DB
         dbActions()
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                this.auth = true
+            } else {
+                this.auth = false
+            }
+        });
     </script>
 
 </body>

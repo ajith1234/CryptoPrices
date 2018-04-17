@@ -1,3 +1,5 @@
+import { stat } from "fs-extra-p";
+
 const state = {
     UserName: "",
     currency: {
@@ -16,7 +18,10 @@ const state = {
             curr: "EUR",
             symbol: "€"
         }
-    ]
+    ],
+    auth: false,
+    name: "",
+    email: ""
 }
 
 const mutations = {
@@ -28,6 +33,16 @@ const mutations = {
         state.currency.curr = curr;
         state.currency.symbol = state.currencyOptions.find(a => a.curr === curr).symbol
 
+    },
+
+    setAuth(state) {
+        state.auth = !state.auth
+    },
+    setName(state, name) {
+        state.name = name
+    },
+    setEmail(state, email) {
+        state.email = email
     }
 
 }
@@ -38,7 +53,7 @@ const actions = {
 
 const getters = {
     getName(state) {
-        return state.UserName
+        return state.name
     },
     getCurrencyOptions(state) {
         return state.currencyOptions.map(curr => curr.curr)
@@ -48,6 +63,9 @@ const getters = {
     },
     getCurrencySymbol(state, currency) {
         return state.currencyOptions.find(a => a.curr === currency)
+    },
+    getAuth(state) {
+        return state.auth
     }
 
 }
