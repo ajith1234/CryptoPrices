@@ -18,13 +18,6 @@
     <v-flex xs12 lg6 offset-lg3 align-start height="100%">
           <v-form v-model="valid" ref="form">
             <v-text-field
-              label="Name"
-              v-model="name"
-              :rules="nameRules"
-              :counter="10"
-              required
-            ></v-text-field>
-            <v-text-field
               label="E-mail"
               v-model="email"
               :rules="emailRules"
@@ -70,11 +63,6 @@ export default {
   name:'login',
    data: () => ({
       valid: false,
-      name: '',
-      nameRules: [
-        v => !!v || 'Name is required',
-        v => v.length <= 25 || 'Name must be less than 10 characters'
-      ],
       email: '',
       emailRules: [
         v => !!v || 'E-mail is required',
@@ -94,13 +82,11 @@ export default {
      
       if (this.$refs.form.validate()) {
        
-        console.log("password: "+this.password)
-        console.log("email:"+ this.email)
-        console.log("compare pass to:" + this.password2)
-        console.log(this.checkbox)
-        console.log(this.password==this.password2)
-        let USER_DETAILS = {name: this.name, email: this.email, password:this.password}
-        ipcRenderer.send('send-login', USER_DETAILS)
+        
+       
+        let USER_DETAILS = { email: this.email, password:this.password}
+        this.$electron.ipcRenderer.send('send-login', USER_DETAILS)
+        console.log("request sent to main process")
 
         }
     },

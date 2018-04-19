@@ -21,7 +21,8 @@ const state = {
     ],
     auth: false,
     name: "",
-    email: ""
+    email: "",
+    user: null
 }
 
 const mutations = {
@@ -43,8 +44,15 @@ const mutations = {
     },
     setEmail(state, email) {
         state.email = email
-    }
+    },
 
+    setUser(state, user) {
+        state.user = user
+    },
+
+    destroyUser(state) {
+        state.user = null
+    }
 }
 
 const actions = {

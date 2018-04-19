@@ -46,7 +46,8 @@ function createWindow() {
         'minHeight': 600,
         useContentSize: true,
         'minWidth': 800,
-        frame: false
+        frame: false,
+        show: false
     })
 
     //Loads the pages to each browser window
@@ -80,21 +81,46 @@ app.on('activate', () => {
 })
 
 
-// called from app.vue
+// Coin Data IPC Methods
 ipcMain.on('get-coins-main', (event) => {
     dataWindow.webContents.send("get-coin-data")
 })
 
-// called from data.ejs
 ipcMain.on('send-coin-data', (event, data) => {
     mainWindow.webContents.send('set-data', data)
 })
 
+// Login IPC Methods
+
 ipcMain.on("send-login", (event, data) => {
+    console.log("main sending to data process")
+    console.log(data)
     dataWindow.webContents.send("Login", data)
 })
 
+ipcMain.on('logged-in', (event, user) => {
+    console.log("main process calling set-auth...");
+    console.log(user)
+    mainWindow.send("set-auth", user)
+})
 
+// Logout IPC Methods
+ipcMain.on('logout', (event) => {
+    console.log("Loggingout user...");
+    dataWindow.send("logout")
+})
+
+
+// Register IPC Methods
+ipcMain.on("registerUser", (event, data) => {
+    console.log(data)
+    dataWindow.send("SignUp", data)
+})
+
+// OnError
+ipcMain.on("auth-error", (event, error) => {
+    mainWindow.send("alertError", error)
+})
 
 
 /**

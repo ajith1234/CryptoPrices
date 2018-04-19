@@ -5,7 +5,7 @@
 
   <v-layout row wrap align-center>
     
-    <v-flex xs12 lg6 offset-lg3 class="">
+    <v-flex xs12 lg6 offset-lg3 class="mt-4">
     <v-card>
     <v-card-title primary-title>
       <v-card-text class="text-xs-center display-1 lg-mb-0">
@@ -18,13 +18,6 @@
     <v-flex xs12 lg6 offset-lg3 align-start height="100%">
         <template>
           <v-form v-model="valid" ref="form">
-            <v-text-field
-              label="Name"
-              v-model="name"
-              :rules="nameRules"
-              :counter="10"
-              required
-            ></v-text-field>
             <v-text-field
               label="E-mail"
               v-model="email"
@@ -82,11 +75,6 @@ export default {
   name:'signup',
   data: () => ({
       valid: false,
-      name: '',
-      nameRules: [
-        v => !!v || 'Name is required',
-        v => v.length <= 25 || 'Name must be less than 10 characters'
-      ],
       email: '',
       emailRules: [
         v => !!v || 'E-mail is required',
@@ -115,13 +103,13 @@ export default {
         alert("passwords do not match")
         }
        
-        console.log("password: "+this.password)
+        console.log(" Sign in password: "+this.password)
         console.log("email:"+ this.email)
-        console.log("compare pass to:" + this.password2)
+        console.log("Compare pass to:" + this.password2)
         console.log(this.checkbox)
         console.log(this.password==this.password2)
-        let USER_DETAILS = [this.name, this.email, this.password]
-        ipc.send('registerUser', USER_DETAILS)
+        let USER_DETAILS = {email: this.email, password: this.password}
+        this.$electron.ipcRenderer.send('registerUser', USER_DETAILS)
      
       }
     },

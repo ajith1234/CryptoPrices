@@ -10,7 +10,8 @@
       <v-list dense>
         <v-list-tile
          router
-         :to="'home'">
+         :to="'home'"
+         v-show="Auth">
           <v-list-tile-action >
             <v-icon>dashboard</v-icon>
           </v-list-tile-action>
@@ -20,7 +21,8 @@
         </v-list-tile>
         <v-list-tile  
         router
-        :to="'settings'">
+        :to="'settings'"
+        v-show="Auth">
           <v-list-tile-action>
             <v-icon>settings</v-icon>
           </v-list-tile-action>
@@ -30,7 +32,8 @@
         </v-list-tile>
         <v-list-tile  
         router
-        :to="'signup'">
+        :to="'signup'"
+        v-show="!Auth">
           <v-list-tile-action>
             <v-icon>assignment</v-icon>
           </v-list-tile-action>
@@ -40,12 +43,23 @@
         </v-list-tile>
         <v-list-tile  
         router
-        :to="'login'">
+        :to="'login'"
+        v-show="!Auth">
           <v-list-tile-action>
             <v-icon>settings</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>Log in</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile  
+        @click="logout"
+        v-show="Auth">
+          <v-list-tile-action>
+            <v-icon>settings</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Log out</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
@@ -62,7 +76,7 @@
 </template>
 
 <script>
-
+import { mapGetters } from 'vuex'
 export default {
     name: "navbar",
     data: () => ({
@@ -78,9 +92,24 @@ export default {
        },
        max: function () {
            this.$electron.remote.getCurrentWindow().maximize()
-       } 
+       },
+
+       logout: function() {
+          this.$electron.ipcRenderer.send("logout")
+          this.$store.commit("setAuth")
+          this.$store.commit("destroyUser")
+          this.$router.push('login')
+       }
 
        
+    },
+    computed: {
+    
+    ...mapGetters({
+      Auth:'getAuth'
+    })  
+    
+    
     }
 }
 </script>

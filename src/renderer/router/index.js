@@ -5,13 +5,15 @@ Vue.use(Router)
 
 export default new Router({
     routes: [{
-            path: '/',
+            path: '/home',
             name: 'home',
+            meta: { authRequired: true },
             component: require('@/components/Home').default
         },
         {
             path: '/settings',
             name: 'settings',
+            meta: { authRequired: true },
             component: require('@/components/Settings').default
         },
         {
@@ -26,13 +28,8 @@ export default new Router({
         },
         {
             path: '*',
-            redirect: '/'
+            redirect: '/signup'
         }
     ],
-    beforeEach: ((to, from, next) => {
-        console.log(to)
-        console.log(from)
-        console.log(next)
-    })
 
 })

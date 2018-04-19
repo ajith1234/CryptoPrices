@@ -40,8 +40,16 @@
             this.$store.commit("setData", data)
           })
 
-          ipcRenderer.on("auth-error", (event, data) => {
+          ipcRenderer.on("alertError", (event, data) => {
             alert(data)
+          })
+
+          ipcRenderer.on("set-auth", (event, user)=>{
+            console.log("Setting vuex state")
+            console.log(user)
+            this.$store.commit("setAuth")
+            this.$store.commit("setUser", user)
+            this.$router.push('home')
           })
        
     
