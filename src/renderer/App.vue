@@ -2,10 +2,10 @@
   <div id="app">
     <v-app id="inspire">
       <nav-bar></nav-bar>
-      <v-container dark fluid fill-height color="white" :class="{'px-0': $vuetify.breakpoint.xsOnly }">
-       <v-slide-y-transition mode="out-in">
-            <router-view class="content"></router-view>
-          </v-slide-y-transition>
+      <v-container fluid fill-height>
+         <v-fade-transition mode="out-in">
+              <router-view></router-view>
+            </v-fade-transition>
       </v-container>
     <v-footer app fixed>
        
@@ -40,16 +40,24 @@
             this.$store.commit("setData", data)
           })
 
+          //Login and signup alerts
           ipcRenderer.on("alertError", (event, data) => {
             alert(data)
           })
 
           ipcRenderer.on("set-auth", (event, user)=>{
             console.log("Setting vuex state")
-            console.log(user)
+           
             this.$store.commit("setAuth")
-            this.$store.commit("setUser", user)
+            //
             this.$router.push('home')
+          })
+
+          ipcRenderer.on("set-user", (event, user)=>{
+            console.log("setting vuex user state")
+            console.log(user)
+            this.$store.commit("setUser", user)
+            
           })
        
     

@@ -1,13 +1,13 @@
 <template>
  <v-container grid-list-xs>
    <v-layout row wrap>
-     <v-flex xs10 offset-xs1>
+     <v-flex xs12 lg6 offset-lg3>
         <v-card dark>
           <v-card-text class="text-xs-center display-3">Settings</v-card-text>
         </v-card>
       </v-flex>
 
-<v-flex xs12>
+<v-flex xs12 lg6 offset-lg3>
   <v-form>
      <v-text-field
       label="Please Enter your name.."

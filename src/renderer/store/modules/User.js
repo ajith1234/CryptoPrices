@@ -74,6 +74,9 @@ const getters = {
     },
     getAuth(state) {
         return state.auth
+    },
+    getUser(state) {
+        return state.user
     }
 
 }

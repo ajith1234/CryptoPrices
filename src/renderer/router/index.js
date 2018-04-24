@@ -27,6 +27,27 @@ export default new Router({
             component: require('@/components/SignUp').default
         },
         {
+            path: '/portfolio',
+            name: 'portfolio',
+            meta: { authRequired: true },
+            component: require('@/components/Portfolio').default
+
+        },
+        {
+            path: '/guide',
+            name: 'guide',
+            meta: { authRequired: true },
+            component: require('@/components/Guide').default
+
+        },
+        {
+            path: '/graph',
+            name: 'graph',
+            meta: { authRequired: true },
+            component: require('@/components/Graph').default
+
+        },
+        {
             path: '*',
             redirect: '/signup'
         }

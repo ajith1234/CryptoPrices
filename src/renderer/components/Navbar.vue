@@ -19,6 +19,40 @@
             <v-list-tile-title>Dashboard</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
+        <v-list-tile
+         router
+         :to="'portfolio'"
+         v-show="Auth">
+          <v-list-tile-action >
+            <v-icon>import_contacts</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Portfolio</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile
+         router
+         :to="'graph'"
+         v-show="Auth">
+          <v-list-tile-action >
+            <v-icon>search</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Coin Research</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile
+         router
+         :to="'guide'"
+         v-show="Auth">
+          <v-list-tile-action >
+            <v-icon>language</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Guide</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+
         <v-list-tile  
         router
         :to="'settings'"
@@ -46,7 +80,7 @@
         :to="'login'"
         v-show="!Auth">
           <v-list-tile-action>
-            <v-icon>settings</v-icon>
+            <v-icon>account_circle</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>Log in</v-list-tile-title>
@@ -56,7 +90,7 @@
         @click="logout"
         v-show="Auth">
           <v-list-tile-action>
-            <v-icon>settings</v-icon>
+            <v-icon>https</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>Log out</v-list-tile-title>

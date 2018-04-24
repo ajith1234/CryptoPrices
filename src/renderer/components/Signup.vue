@@ -1,12 +1,12 @@
 <template>
 
-<v-container fill-height class="full" >
+<v-container grid-list-xs >
 
 
   <v-layout row wrap align-center>
     
     <v-flex xs12 lg6 offset-lg3 class="mt-4">
-    <v-card>
+    <v-card class="elevation-12">
     <v-card-title primary-title>
       <v-card-text class="text-xs-center display-1 lg-mb-0">
         Sign Up to Crypto Prices
@@ -101,7 +101,7 @@ export default {
         
         if(this.password!==this.password2){
         alert("passwords do not match")
-        }
+        }else{
        
         console.log(" Sign in password: "+this.password)
         console.log("email:"+ this.email)
@@ -110,7 +110,7 @@ export default {
         console.log(this.password==this.password2)
         let USER_DETAILS = {email: this.email, password: this.password}
         this.$electron.ipcRenderer.send('registerUser', USER_DETAILS)
-     
+        }
       }
     },
     clear(e) {

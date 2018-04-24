@@ -98,10 +98,10 @@ ipcMain.on("send-login", (event, data) => {
     dataWindow.webContents.send("Login", data)
 })
 
-ipcMain.on('logged-in', (event, user) => {
+ipcMain.on('logged-in', (event) => {
     console.log("main process calling set-auth...");
-    console.log(user)
-    mainWindow.send("set-auth", user)
+    //console.log(user)
+    mainWindow.send("set-auth")
 })
 
 // Logout IPC Methods
@@ -122,6 +122,12 @@ ipcMain.on("auth-error", (event, error) => {
     mainWindow.send("alertError", error)
 })
 
+//Set user data
+ipcMain.on("send-user-data", (event, data) => {
+    console.log("send-user-data")
+    console.log(data)
+    mainWindow.send("set-user", data)
+})
 
 /**
  * Auto Updater

@@ -1,12 +1,12 @@
 <template>
 
-  <v-container fill-height class="full" >
+  <v-container grid-list-xs >
 
 
   <v-layout row wrap align-center>
     
-    <v-flex xs12 lg6 offset-lg3 class="">
-    <v-card>
+    <v-flex xs12 lg6 offset-lg3 mb-4>
+    <v-card class="elevation-12">
     <v-card-title primary-title>
       <v-card-text class="text-xs-center display-1 lg-mb-0">
         Login to Crypto Prices
@@ -15,7 +15,7 @@
     </v-card>      
     </v-flex>
 
-    <v-flex xs12 lg6 offset-lg3 align-start height="100%">
+    <v-flex xs12 lg6 offset-lg3>
           <v-form v-model="valid" ref="form">
             <v-text-field
               label="E-mail"

@@ -31,6 +31,7 @@ const getters = {
     getCoin(state) {
         return state.Coins
     }
+
 }
 
 

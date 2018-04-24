@@ -5,7 +5,7 @@
   
     <v-layout row wrap fill-height>
       
-      <v-jumbotron class="ma-4" height="200px" width="100%">
+      <v-jumbotron class="ma-1" height="200px" width="100%">
     <v-container fill-height>
       <v-layout align-center>
         <v-flex>
@@ -18,11 +18,11 @@
   </v-jumbotron>
 
       <v-flex xs4 v-for="Coin in Coins" :key="Coin.id">
-       <v-card class="ma-1 pa-2" height="20vh">
+       <v-card class="ma-1 pa-2 elevation-10" height="20vh">
          <div :class="{'display-2 mb-4': $vuetify.breakpoint.lgAndUp}" class="headline text-xs-center mb-1 ">({{Coin.symbol}})</div>
          <div :class="{'headline': $vuetify.breakpoint.lgAndUp}" class="text-xs-left text-lg-center ">Price: ${{Coin.price_usd}}</div>
       <p v-bind:class="{ 'red--text': (Coin.percent_change_24h < 0), 'green--text':(Coin.percent_change_24h>0), 'headline':$vuetify.breakpoint.lgAndUp }" class="text-xs-left text-lg-center">Change (24h): {{Coin.percent_change_24h}}%</p>
-         <div :class="{'headline': $vuetify.breakpoint.lgAndUp}" class="text-xs-left text-lg-center">Marketcap: ${{Coin.market_cap_usd}}</div>
+         <div :class="{'headline': $vuetify.breakpoint.lgAndUp}" class="text-xs-left text-lg-center mb-2">Marketcap: ${{numberWithCommas(Coin.market_cap_usd)}}</div>
         </v-card>   
       </v-flex>
     </v-layout>
@@ -39,6 +39,12 @@ export default {
         redP : 'text-danger'
        
       }
+    },
+    methods:{
+      numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
     },
     computed: {
     

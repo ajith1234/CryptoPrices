@@ -68,6 +68,16 @@
         //Login Methods
 
         ipcRenderer.on("Login", (event, data) => {
+            //Ensure no one is logged in when trying to login
+            if (firebase.auth().currentUser) {
+                firebase.auth().signOut().then(function() {
+                    this.user = null
+                    this.auth = null
+                    console.log("user logged out...")
+                }).catch(function(error) {
+                    // An error happened.
+                })
+            }
             console.log("logging in with" + data.email + data.password)
 
             firebase.auth().signInWithEmailAndPassword(data.email, data.password).catch(function(error) {
@@ -83,6 +93,16 @@
         })
 
         ipcRenderer.on("SignUp", (event, data) => {
+            if (firebase.auth().currentUser) {
+                firebase.auth().signOut().then(function() {
+                    this.user = null
+                    this.auth = null
+                    console.log("user logged out...")
+                }).catch(function(error) {
+                    // An error happened.
+                })
+            }
+
             firebase.auth().createUserWithEmailAndPassword(data.email, data.password).catch(function(error) {
                 // Handle Errors here.
                 var errorCode = error.code;
@@ -125,8 +145,13 @@
                 }).catch(console.error)
         }
 
-        const setStates = () => {
-            ipcRenderer.send("logged-in", this.user)
+        const setAuth = () => {
+            ipcRenderer.send("logged-in")
+        }
+
+        const setUser = (user) => {
+            console.log("called")
+            ipcRenderer.send("send-user-data", user)
         }
 
         //---------------------------MAIN RUNTIME LOGIC-------------------------//
@@ -141,8 +166,10 @@
         //on load
         client.getTicker()
             .then((data) => {
+
                 this.Coins = data
                 this.CoinOptions = data.map(a => a.id)
+
 
             }).catch(console.error)
 
@@ -161,9 +188,11 @@
                 this.user = user
                 this.auth = true
                 console.log("logged in....")
-                console.log(this.user)
-                console.log(user)
-                setStates(this.user)
+                    // console.log(this.user)
+                    // console.log(user)
+                setAuth()
+                setUser(user.uid)
+
             } else {
                 this.auth = false
                 this.user = null
